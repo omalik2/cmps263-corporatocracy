@@ -389,7 +389,7 @@ function make_y_gridlines() {
 }
 
 function generateTooltipHtml(d, g) {
-    var header = "<link rel=\"stylesheet\" type=\"text/css\" href=\"corporatocracy.css\">" +
+    var header = "<link rel=\"stylesheet\" type=\"text/css\" href=\"policy_contributions.css\">" +
         "<div class=\"tip name\">" + d.data.name + "</div>" +
         "<div class=\"tip status\">" + d.data.status + "</div>" +
         "<div class=\"tip description\">" + d.data.desc + "</div>" +

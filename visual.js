@@ -1,11 +1,11 @@
 var margin = {
         top: 10,
         right: 300,
-        bottom: 140,
-        left: 80
+        bottom: 120,
+        left: 120
     },
     width = 1500 - margin.left - margin.right,
-    height = 475 - margin.top - margin.bottom,
+    height = 455 - margin.top - margin.bottom,
     paddingInner = 0.4;
 
 
@@ -328,6 +328,7 @@ d3.queue()
             .attr("class", "axis")
             .call(d3.axisLeft(y2).ticks(6, "s"))
             .append("text")
+
             .attr("x", -height / 2)
             .attr("y", -45)
             .attr("transform", "rotate(270)")
@@ -338,21 +339,7 @@ d3.queue()
             .attr("text-anchor", "middle")
             .text("Contributions per Representitive ($)");
 
-
-
-        // add the Y gridlines
-        chart2.append("g")
-            .attr("class", "grid")
-            .style("opacity", 0)
-            // Make the gridlines
-            .call(make_y_gridlines()
-                .ticks(6)
-                .tickSize(-width)
-                .tickFormat("")
-            )
-
-        legend_contri = ["Republicans who voted in favor of lobby", "Republicans who voted against lobby", "Lobbied Republicans who did not vote", "Lobbied Democrats who did not vote", "Democrats who voted against lobby", "Democrats who voted in favor of lobby"];
-        legend_total = ["Total Contributions to Republicans", "Total Contributions to Democrats"];
+        var legend_contri = ["Republicans who voted in favor of lobby", "Republicans who voted against lobby", "Lobbied Republicans who did not vote", "Lobbied Democrats who did not vote", "Democrats who voted against lobby", "Democrats who voted in favor of lobby"];
 
         var legend2 = chart2.append("g")
             .attr("font-family", "sans-serif")
@@ -382,11 +369,6 @@ d3.queue()
                 return legend_contri[legend_contri.length - 1 - i];
             });
     });
-
-// gridlines on left axis with scaling of y
-function make_y_gridlines() {
-    return d3.axisLeft(y2);
-}
 
 function generateTooltipHtml(d, g) {
     var header = "<link rel=\"stylesheet\" type=\"text/css\" href=\"policy_contributions.css\">" +
@@ -500,5 +482,4 @@ function generateTooltipHtml(d, g) {
         "</div>";
 
     return header.concat(body.concat(trailer));
-
 }

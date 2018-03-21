@@ -1,7 +1,8 @@
 .intro {
     text-align: center;
 }
-.row_visual{
+
+.row_visual {
     width: 100%;
     height: 100%;
     margin: auto;
@@ -23,6 +24,7 @@
 }
 
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+
 @media (max-width: 600px) {
     .col_sources {
         width: 100%;
@@ -36,4 +38,34 @@
 
 .row_contributor p {
     text-align: center;
+}
+
+div.tooltip {
+    position: absolute;
+    max-width: 300px;
+    max-height: 400px;
+    text-align: left;
+    padding: 5px;
+    font: 12px sans-serif;
+    background: antiquewhite;
+    border: 1px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.tip.name {
+    text-align: center;
+    font-size: 16px;
+    font-variant: small-caps;
+}
+
+.tip.description {
+    text-align: justify;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+.tip.status {
+    text-align: center;
+    margin-bottom: 5px;
 }

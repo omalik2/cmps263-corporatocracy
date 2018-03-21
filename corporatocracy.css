@@ -1,3 +1,15 @@
+body {
+    vertical-align: middle;
+
+}
+
+p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    padding-left: 70px;
+    padding-right: 70px;
+}
+
 .intro {
     text-align: center;
 }
@@ -22,6 +34,20 @@
     display: table;
     clear: both;
 }
+
+div.page-footer {
+    background: #f9f9f9;
+    text-align: left;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+div.col-md-2 {
+    text-align: center;
+}
+
+
 
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
 
@@ -68,4 +94,10 @@ div.tooltip {
 .tip.status {
     text-align: center;
     margin-bottom: 5px;
+}
+
+.grid line {
+    stroke: lightgrey;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
 }

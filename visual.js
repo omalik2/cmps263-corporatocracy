@@ -5,7 +5,7 @@ var margin = {
         left: 80
     },
     width = 1500 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom,
+    height = 475 - margin.top - margin.bottom,
     paddingInner = 0.4;
 
 
@@ -14,6 +14,7 @@ var chart = d3.select("#chartarea")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + 20)
+
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -98,104 +99,27 @@ d3.queue()
             })
             .attr("width", x.bandwidth())
             .on("mouseover", function (d, i) {
-                //                console.log(i);
-                //                var story = "";
-                //                if (i > 3) {
-                //                    // Democrat Story
-                //                    story = story.concat(d.data.count_align_d + " Democrats voted in favor of lobby.\n");
-                //                    story = story.concat(d.data.count_unalign_d + " Democrats voted opposed to lobby.\n");
-                //                    story = story.concat(d.data.count_novote_d + " Democrats who were lobbied did not vote.\n");
-                //                    story = story.concat(d.data.count_nocontri_d + " Democrats were not lobbied.\n");
-                //                } else {
-                //                    story = story.concat(d.data.count_align_r + " Republicans voted in favor of lobby.\n");
-                //                    story = story.concat(d.data.count_unalign_r + " Republicans voted opposed to lobby.\n");
-                //                    story = story.concat(d.data.count_novote_r + " Republicans who were lobbied did not vote.\n");
-                //                    story = story.concat(d.data.count_nocontri_r + " Republicans were not lobbied.\n");
-                //                }
+
+                var xPosition = d3.mouse(this)[0] - 5;
+                var yPosition = d3.mouse(this)[1] - 5;
 
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                tooltip.html("<div class=\"tip name\">" + d.data.name + "</div>" +
-                        "<div class=\"tip status\">" + d.data.status + "</div>" +
-                        "<div class=\"tip description\">" + d.data.desc + "</div>" +
-                        "<div class=\"tip vote\" style=\"margin-top:5px\">" +
-                        //                        "<p>" +
-                        //                        story +
-                        //                        d.data.count_align_d + " Democrats voted in favor of lobby.<br />" +
-                        //                        d.data.count_unalign_d + " Democrats voted opposed to lobby.<br />" +
-                        //                        d.data.count_novote_d + " Democrats who were lobbied did not vote.<br />" +
-                        //                        d.data.count_nocontri_d + " Democrats were not lobbied.<br />" +
-                        //                        "</p>" +
-                        "<p style=\"font-variant:small-caps\"><b><left>Vote Distribution</left></b></p>" +
-                        "<table style=\"width:100%;  border-collapse:collapse\" >" +
-                        "<tr>" +
-                        "<th width=\"25%\" align=\"center\" style=\"padding-bottom:0.5  em; border-bottom: 1pt solid black\">Party</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:green; padding-bottom:0.5  em; border-bottom: 1pt solid black\">Voted Yes</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:red; padding-bottom:0.5  em; border-bottom: 1pt solid black\">Voted No</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:slategrey; padding-bottom:0.5  em; border-bottom: 1pt solid black\">Abstained</th>" +
-                        "</tr>" +
-
-                        "<tr>" +
-                        "<td width=\"25%\" align=\"center\">Rep</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:green\">" + d.data.vote_yes_r + "</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:red\">" + d.data.vote_no_r + "</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:slategrey\">" + d.data.vote_dnv_r + "</td>" +
-                        "</tr>" +
-
-                        "<tr>" +
-                        "<td width=\"25%\" align=\"center\">Dem</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:green\">" + d.data.vote_yes_d + "</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:red\">" + d.data.vote_no_d + "</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:slategrey\">" + d.data.vote_dnv_d + "</td>" +
-                        "</tr>" +
-                        "</table>" +
-                        "</div>" +
-
-                        "<div class=\"tip contributions\" style=\"margin-top:10px\">" +
-                        "<p><b  style=\"font-variant:small-caps\"><left>Contribution Distribution</left></b><br /> \
-                             Average contribution per representitive who voted in favor of lobby, against lobby or was lobbied but did not vote.</p>" +
-                        "<table style=\"width:100%; border-collapse:collapse\" >" +
-                        "<tr>" +
-                        "<th width=\"25%\" align=\"center\" style=\"padding-bottom:0.5em; border-bottom: 1pt solid black\">Party</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:green; padding-bottom:0.5em; border-bottom: 1pt solid black\">Voted in Favor of Lobby</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:red; padding-bottom:0.5em; border-bottom: 1pt solid black\">Voted Against Lobby</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:slategrey; padding-bottom:0.5  em; border-bottom: 1pt solid black\">Lobbied but Abstained</th>" +
-                        "</tr>" +
-
-                        "<tr>" +
-                        "<td width=\"25%\" align=\"center\">Rep</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:green\">" + d3.format("$,")(d.data.contri_align_r) + "</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:red\">" + d3.format("$,")(d.data.contri_unalign_r) + "</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:slategrey\">" + d3.format("$,")(d.data.contri_novote_r) + "</td>" +
-                        "</tr>" +
-
-                        "<tr>" +
-                        "<td width=\"25%\" align=\"center\">Dem</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:green\">" + d3.format("$,")(d.data.contri_align_d) + "</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:red\">" + d3.format("$,")(d.data.contri_unalign_d) + "</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:slategrey\">" + d3.format("$,")(d.data.contri_novote_d) + "</td>" +
-                        "</tr>" +
-                        "</table>" +
-                        "</div>"
+                tooltip.html(
+                        generateTooltipHtml(d, 1)
                     )
-                    /* d3.event.pageX gets the X,Y coordinates of the event relative to the whole document.
-                       Used to position the tooltip box. */
-                    //                    .style("left", (d3.event.pageX * 1.05) + "px")
-                    //                    .style("top", (d3.event.pageY - 28) + "px");
-                    .style("left", ((x(d.data.abv)) + 130) + "px")
+                    .style("left", (xPosition + 250) + "px")
                     .style("top", function () {
-                        return (d3.event.pageY + 20) + "px";
+                        return (yPosition + 100) + "px";
                     });
 
                 d3.select(".tip.status")
                     .style("color", function () {
                         // Format status of policy
                         if (d.data.status == "Became Law") {
-                            //d3.select(".tip.status").style("color", "green");
                             return "green";
                         } else {
-                            //d3.selectAll(".tip.status").style("color", "red");
                             return "red";
                         }
                     });
@@ -283,22 +207,11 @@ var chart2 = d3.select("#chartarea")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
-//Define Tooltip here
-var tooltip2 = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
-
-var x2 = d3.scaleBand()
-    .rangeRound([0, width])
-    .paddingInner(paddingInner)
-    .align(0.5);
-
 var y2 = d3.scaleLinear()
     .rangeRound([height, 0]);
 
 var z2 = d3.scaleOrdinal()
-    .range(["#b2182b", "#ef8a62", "#e6bfbf", /*"#ffe6e6", "#e6ffff",*/ "#bfbfe6", "#67a9cf", "#2166ac"]);
+    .range(["#b2182b", "#ef8a62", "#e6bfbf", "#bfbfe6", "#67a9cf", "#2166ac"]);
 
 d3.queue()
     .defer(d3.csv, "policy_contributions.csv")
@@ -306,8 +219,6 @@ d3.queue()
         if (error) {
             console.error('CSV loading failed' + error);
         }
-
-        //console.log(data);
 
         // Format numerical data
         data.forEach(function (d) {
@@ -329,11 +240,9 @@ d3.queue()
             d.total_d = +d.total_d;
         });
 
-
-        //        var keys_count = ["count_align_r", "count_unalign_r", "count_novote_r", "count_nocontri_r", "count_nocontri_d", "count_novote_d", "count_unalign_d", "count_align_d"];
         var keys_contri = ["contri_align_r", "contri_unalign_r", "contri_novote_r", "contri_novote_d", "contri_unalign_d", "contri_align_d"];
 
-        x2.domain(data.map(function (d) {
+        x.domain(data.map(function (d) {
             return d.abv;
         }));
 
@@ -347,7 +256,6 @@ d3.queue()
             .data(d3.stack().keys(keys_contri)(data))
             .enter().append("g")
             .attr("fill", function (d) {
-                //console.log(d);
                 return z2(d.key);
             })
             .selectAll("rect")
@@ -356,7 +264,7 @@ d3.queue()
             })
             .enter().append("rect")
             .attr("x", function (d) {
-                return x2(d.data.abv);
+                return x(d.data.abv);
             })
             .attr("y", function (d) {
                 return y2(d[1]);
@@ -364,96 +272,21 @@ d3.queue()
             .attr("height", function (d) {
                 return y2(d[0]) - y2(d[1]);
             })
-            .attr("width", x2.bandwidth())
+            .attr("width", x.bandwidth())
             .on("mouseover", function (d, i) {
-                //                console.log(i);
-                //                var story = "";
-                //                if (i > 3) {
-                //                    // Democrat Story
-                //                    story = story.concat(d.data.count_align_d + " Democrats voted in favor of lobby.\n");
-                //                    story = story.concat(d.data.count_unalign_d + " Democrats voted opposed to lobby.\n");
-                //                    story = story.concat(d.data.count_novote_d + " Democrats who were lobbied did not vote.\n");
-                //                    story = story.concat(d.data.count_nocontri_d + " Democrats were not lobbied.\n");
-                //                } else {
-                //                    story = story.concat(d.data.count_align_r + " Republicans voted in favor of lobby.\n");
-                //                    story = story.concat(d.data.count_unalign_r + " Republicans voted opposed to lobby.\n");
-                //                    story = story.concat(d.data.count_novote_r + " Republicans who were lobbied did not vote.\n");
-                //                    story = story.concat(d.data.count_nocontri_r + " Republicans were not lobbied.\n");
-                //                }
 
-                tooltip2.transition()
+                var xPosition = d3.mouse(this)[0] - 5;
+                var yPosition = d3.mouse(this)[1] - 5;
+
+                tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                tooltip2.html("<div class=\"tip name\">" + d.data.name + "</div>" +
-                        "<div class=\"tip status\">" + d.data.status + "</div>" +
-                        "<div class=\"tip description\">" + d.data.desc + "</div>" +
-                        "<div class=\"tip vote\" style=\"margin-top:5px\">" +
-                        //                        "<p>" +
-                        //                        story +
-                        //                        d.data.count_align_d + " Democrats voted in favor of lobby.<br />" +
-                        //                        d.data.count_unalign_d + " Democrats voted opposed to lobby.<br />" +
-                        //                        d.data.count_novote_d + " Democrats who were lobbied did not vote.<br />" +
-                        //                        d.data.count_nocontri_d + " Democrats were not lobbied.<br />" +
-                        //                        "</p>" +
-                        "<p style=\"font-variant:small-caps\"><b><left>Vote Distribution</left></b></p>" +
-                        "<table style=\"width:100%;  border-collapse:collapse\" >" +
-                        "<tr>" +
-                        "<th width=\"25%\" align=\"center\" style=\"padding-bottom:0.5  em; border-bottom: 1pt solid black\">Party</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:green; padding-bottom:0.5  em; border-bottom: 1pt solid black\">Voted Yes</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:red; padding-bottom:0.5  em; border-bottom: 1pt solid black\">Voted No</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:slategrey; padding-bottom:0.5  em; border-bottom: 1pt solid black\">Abstained</th>" +
-                        "</tr>" +
-
-                        "<tr>" +
-                        "<td width=\"25%\" align=\"center\">Rep</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:green\">" + d.data.vote_yes_r + "</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:red\">" + d.data.vote_no_r + "</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:slategrey\">" + d.data.vote_dnv_r + "</td>" +
-                        "</tr>" +
-
-                        "<tr>" +
-                        "<td width=\"25%\" align=\"center\">Dem</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:green\">" + d.data.vote_yes_d + "</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:red\">" + d.data.vote_no_d + "</td>" +
-                        "<td width=\"25%\" align=\"center\" style=\"color:slategrey\">" + d.data.vote_dnv_d + "</td>" +
-                        "</tr>" +
-                        "</table>" +
-                        "</div>" +
-
-                        "<div class=\"tip contributions\" style=\"margin-top:10px\">" +
-                        "<p><b  style=\"font-variant:small-caps\"><left>Contribution Distribution</left></b><br /> \
-                             Average contribution per representitive who voted in favor of lobby, against lobby or was lobbied but did not vote.</p>" +
-                        "<table style=\"width:100%; border-collapse:collapse\" >" +
-                        "<tr>" +
-                        "<th width=\"25%\" align=\"center\" style=\"padding-bottom:0.5em; border-bottom: 1pt solid black\">Party</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:green; padding-bottom:0.5em; border-bottom: 1pt solid black\">Voted in Favor of Lobby</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:red; padding-bottom:0.5em; border-bottom: 1pt solid black\">Voted Against Lobby</th>" +
-                        "<th width=\"25%\" align=\"center\" style=\"color:slategrey; padding-bottom:0.5  em; border-bottom: 1pt solid black\">Lobbied but Abstained</th>" +
-                        "</tr>" +
-
-                        "<tr>" +
-                        "<td width=\"25%\" align=\"center\">Rep</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:green\">" + d3.format("$,")(d.data.contri_align_r) + "</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:red\">" + d3.format("$,")(d.data.contri_unalign_r) + "</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:slategrey\">" + d3.format("$,")(d.data.contri_novote_r) + "</td>" +
-                        "</tr>" +
-
-                        "<tr>" +
-                        "<td width=\"25%\" align=\"center\">Dem</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:green\">" + d3.format("$,")(d.data.contri_align_d) + "</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:red\">" + d3.format("$,")(d.data.contri_unalign_d) + "</td>" +
-                        "<td class=\"tip contrib\" width=\"25%\" align=\"center\" style=\"color:slategrey\">" + d3.format("$,")(d.data.contri_novote_d) + "</td>" +
-                        "</tr>" +
-                        "</table>" +
-                        "</div>"
+                tooltip.html(
+                        generateTooltipHtml(d, 2)
                     )
-                    /* d3.event.pageX gets the X,Y coordinates of the event relative to the whole document.
-                       Used to position the tooltip box. */
-                    //                    .style("left", (d3.event.pageX * 1.05) + "px")
-                    //                    .style("top", (d3.event.pageY - 28) + "px");
-                    .style("left", ((x(d.data.abv)) + 130) + "px")
+                    .style("left", (xPosition + 250) + "px")
                     .style("top", function () {
-                        return (d3.event.pageY + 20) + "px";
+                        return (yPosition + 200) + "px";
                     });
 
                 d3.select(".tip.status")
@@ -468,7 +301,7 @@ d3.queue()
 
             })
             .on("mouseout", function (d) {
-                tooltip2.transition()
+                tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
             });
@@ -476,7 +309,7 @@ d3.queue()
         chart2.append("g")
             .attr("class", "axis")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x2))
+            .call(d3.axisBottom(x))
             .selectAll("text")
             .style("text-anchor", "end")
             .attr("dx", "-0.8em")
@@ -485,7 +318,7 @@ d3.queue()
             .attr("font-size", "14px");
 
         chart2.append("text")
-            .attr("transform", "translate(" + (width + 5) + "," + (height + 5) + ")")
+            .attr("transform", "translate(" + (width + 20) + "," + (height + 5) + ")")
             .attr("font-weight", "bold")
             .attr("font-family", "sans-serif")
             .attr("font-size", 16)
@@ -513,15 +346,8 @@ d3.queue()
             .style("opacity", 0)
             // Make the gridlines
             .call(make_y_gridlines()
-                // y.ticks().length returns number of ticks in y-axis data
-                // Do not want clutter so use half number of ticks
                 .ticks(6)
-                // The length of the grid lines. Want them to stretch to the right
                 .tickSize(-width)
-                // Defined tick format to be nothing, as we already have axis
-                // supplying the ticks and the tick labels.
-                // If removed, adds another set of axis labels (i.e. 2000,2002)
-                // will be added to the graph
                 .tickFormat("")
             )
 
@@ -562,5 +388,117 @@ function make_y_gridlines() {
     return d3.axisLeft(y2);
 }
 
+function generateTooltipHtml(d, g) {
+    var header = "<link rel=\"stylesheet\" type=\"text/css\" href=\"corporatocracy.css\">" +
+        "<div class=\"tip name\">" + d.data.name + "</div>" +
+        "<div class=\"tip status\">" + d.data.status + "</div>" +
+        "<div class=\"tip description\">" + d.data.desc + "</div>" +
+        "<div class=\"tip vote\" style=\"margin-top:5px\">" +
+        "<p class=\"tip h2\">Vote Distribution</p>" +
+        "<table class=\"tip table\">" +
+        "<tr>" +
+        "<th class=\"tip table\">Party</th>" +
+        "<th class=\"tip table yes\">Voted Yes</th>" +
+        "<th class=\"tip table no\">Voted No</th>" +
+        "<th class=\"tip table dnv\">Abstained</th>" +
+        "</tr>" +
 
-//Number of Republicans who voted in favor of lobby, Avg.Contribution to Republicans who voted in favor of lobby, Number of Republicans who voted against lobby, Avg.Contribution to Republicans who voted against lobby, Number of Republicans who did not vote, Avg.Contribution to Republicans who did not vote, Total Contributions to Republicans, Number of Democrats who voted in favor of lobby, Avg.Contribution to Democrats who voted in favor of lobby, Number of Democrats who voted against lobby, Avg.Contribution to Democrats who voted against lobby, Number of Democrats who did not vote, Avg.Contribution to Democrats who did not vote, Total Contributions to Democrats
+        "<tr>" +
+        "<td class=\"tip table\">Rep</td>" +
+        "<td class=\"tip table yes\" >" + d.data.vote_yes_r + "</td>" +
+        "<td class=\"tip table no\">" + d.data.vote_no_r + "</td>" +
+        "<td class=\"tip table dnv\">" + d.data.vote_dnv_r + "</td>" +
+        "</tr>" +
+
+        "<tr>" +
+        "<td class=\"tip table\">Dem</td>" +
+        "<td class=\"tip table yes\">" + d.data.vote_yes_d + "</td>" +
+        "<td class=\"tip table no\">" + d.data.vote_no_d + "</td>" +
+        "<td class=\"tip table dnv\">" + d.data.vote_dnv_d + "</td>" +
+        "</tr>" +
+        "</table>" +
+        "</div>";
+
+    var body;
+    if (g == 1) {
+        body = "<div class=\"tip contributions\" style=\"margin-top:10px\">" +
+            "<p><b  class=\"tip h2\">Contribution Distribution</b><br /> \
+                             Average contribution per representitive who voted in favor of lobby, against lobby or was lobbied but did not vote.</p>" +
+            "<table class=\"tip table\">" +
+            "<tr>" +
+            "<th class=\"tip table\">Party</th>" +
+            "<th class=\"tip table yes\">Voted in Favor of Lobby</th>" +
+            "<th class=\"tip table no\">Voted Against Lobby</th>" +
+            "<th class=\"tip table dnv\">Lobbied but Abstained</th>" +
+            "</tr>" +
+
+            "<tr>" +
+            "<td class=\"tip table\">Rep</td>" +
+            "<td class=\"tip table yes\">" + d3.format("$,")(d.data.contri_align_r) + "</td>" +
+            "<td class=\"tip table no\">" + d3.format("$,")(d.data.contri_unalign_r) + "</td>" +
+            "<td class=\"tip table dnv\">" + d3.format("$,")(d.data.contri_novote_r) + "</td>" +
+            "</tr>" +
+
+            "<tr>" +
+            "<td class=\"tip table\">Dem</td>" +
+            "<td class=\"tip table yes\">" + d3.format("$,")(d.data.contri_align_d) + "</td>" +
+            "<td class=\"tip table no\">" + d3.format("$,")(d.data.contri_unalign_d) + "</td>" +
+            "<td class=\"tip table dnv\">" + d3.format("$,")(d.data.contri_novote_d) + "</td>" +
+            "</tr>" +
+            "</table>" +
+            "</div>";
+    } else if (g == 2) {
+        body = "<div class=\"tip contributions\" style=\"margin-top:10px\">" +
+            "<p><b  class=\"tip h2\">Vote Distribution by Lobbying</b><br /> \
+                             Count of representitives who voted in favor of lobby, against lobby, were not lobbied at all or were lobbied but did not vote.</p>" +
+            "<table class=\"tip table\">" +
+            "<tr>" +
+            "<th class=\"tip table\">Party</th>" +
+            "<th class=\"tip table yes\">Voted in Favor of Lobby</th>" +
+            "<th class=\"tip table no\">Voted Against Lobby</th>" +
+            "<th class=\"tip table dnv\">Lobbied but Abstained</th>" +
+            "<th class=\"tip table\">Not Lobbied</th>" +
+            "</tr>" +
+
+            "<tr>" +
+            "<td class=\"tip table\">Rep</td>" +
+            "<td class=\"tip table yes\">" + (d.data.count_align_r) + "</td>" +
+            "<td class=\"tip table no\">" + (d.data.count_unalign_r) + "</td>" +
+            "<td class=\"tip table dnv\">" + (d.data.count_novote_r) + "</td>" +
+            "<td class=\"tip table\">" + (d.data.count_nocontri_r) + "</td>" +
+            "</tr>" +
+
+            "<tr>" +
+            "<td class=\"tip table\">Dem</td>" +
+            "<td class=\"tip table yes\">" + (d.data.count_align_d) + "</td>" +
+            "<td class=\"tip table no\">" + (d.data.count_unalign_d) + "</td>" +
+            "<td class=\"tip table dnv\">" + (d.data.count_novote_d) + "</td>" +
+            "<td class=\"tip table\">" + (d.data.count_nocontri_d) + "</td>" +
+            "</tr>" +
+            "</table>" +
+            "</div>";
+    }
+
+    var trailer = "<div class=\"tip totals\" style=\"margin-top:10px\">" +
+        "<p><b  class=\"tip h2\">Total Donations</b></p>" +
+        "<table class=\"tip table\">" +
+
+        "<tr>" +
+        "<td class=\"tip table total r\">Republican</td>" +
+        "<td class=\"tip table total r\">" + d3.format("$,")(d.data.total_r) + "</td>" +
+        "</tr>" +
+        "<tr>" +
+        "<td class=\"tip table total d\">Democrat</td>" +
+        "<td class=\"tip table total d\" style=\"padding-bottom: 0.2em;border-bottom: 0.5pt solid black\">" + d3.format("$,")(d.data.total_d) + "</td>" +
+        "</tr>" +
+
+        "<tr>" +
+        "<td class=\"tip table total\">Total for House</td>" +
+        "<td class=\"tip table total\">" + d3.format("$,")(d.data.total_r + d.data.total_d) + "</td>" +
+        "</tr>" +
+        "</table>" +
+        "</div>";
+
+    return header.concat(body.concat(trailer));
+
+}

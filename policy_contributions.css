@@ -82,6 +82,18 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
+div.storytip {
+    position: absolute;
+    max-width: 150px;
+    text-align: left;
+    padding: 5px;
+    font: 12px sans-serif;
+    background: antiquewhite;
+    border: 1px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
 div.tooltip {
     position: absolute;
     max-width: 300px;

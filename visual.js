@@ -24,6 +24,10 @@ var tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
+var storytip = d3.select("body").append("div")
+    .attr("class", "storytip")
+    .style("opacity", 0);
+
 var x = d3.scaleBand()
     .rangeRound([0, width])
     .paddingInner(paddingInner)
@@ -67,6 +71,7 @@ d3.queue()
 
         var keys_count = ["count_align_r", "count_unalign_r", "count_novote_r", "count_nocontri_r", "count_nocontri_d", "count_novote_d", "count_unalign_d", "count_align_d"];
         var keys_contri = ["contri_align_r", "contri_unalign_r", "contri_novote_r", "contri_align_d", "contri_unalign_d", "contri_novote_d"];
+        var legend_count = ["Republicans who voted in favor of lobby", "Republicans who voted against lobby", "Lobbied Republicans who did not vote", "Republicans who were not lobbied", "Democrats who were not lobbied", "Lobbied Democrats who did not vote", "Democrats who voted against lobby", "Democrats who voted in favor of lobby"];
 
         x.domain(data.map(function (d) {
             return d.abv;
@@ -85,10 +90,15 @@ d3.queue()
             })
             .selectAll("rect")
             .data(function (d, i) {
+                // Add in a number that tells us which data series each column belongs to
+                d.forEach(function (e) {
+                    e["dataseries"] = i;
+                });
                 return d;
             })
             .enter().append("rect")
             .attr("x", function (d) {
+
                 return x(d.data.abv);
             })
             .attr("y", function (d) {
@@ -100,6 +110,8 @@ d3.queue()
             .attr("width", x.bandwidth())
             .on("mouseover", function (d, i) {
 
+                console.log(d);
+
                 var xPosition = d3.mouse(this)[0] - 5;
                 var yPosition = d3.mouse(this)[1] - 5;
 
@@ -109,7 +121,7 @@ d3.queue()
                 tooltip.html(
                         generateTooltipHtml(d, 1)
                     )
-                    .style("left", (xPosition + 250) + "px")
+                    .style("left", (xPosition + 300) + "px")
                     .style("top", function () {
                         return (yPosition + 100) + "px";
                     });
@@ -124,9 +136,23 @@ d3.queue()
                         }
                     });
 
+                storytip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                storytip.html(
+                        generateStory(d, legend_count, 1)
+                    )
+                    .style("left", (xPosition + 60) + "px")
+                    .style("top", function () {
+                        return (yPosition + 190) + "px";
+                    });
             })
             .on("mouseout", function (d) {
                 tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+
+                storytip.transition()
                     .duration(500)
                     .style("opacity", 0);
             });
@@ -164,10 +190,6 @@ d3.queue()
             .attr("font-size", 16)
             .attr("text-anchor", "middle")
             .text("Number of House Representatives");
-
-        legend_count = ["Republicans who voted in favor of lobby", "Republicans who voted against lobby", "Lobbied Republicans who did not vote", "Republicans who were not lobbied", "Democrats who were not lobbied", "Lobbied Democrats who did not vote", "Democrats who voted against lobby", "Democrats who voted in favor of lobby"];
-        legend_contri = ["Avg.Contribution to Republicans who voted in favor of lobby", "Avg.Contribution to Republicans who voted against lobby", "Avg.Contribution to Republicans who did not vote", "Avg.Contribution to Democrats who voted in favor of lobby", "Avg.Contribution to Democrats who voted against lobby", "Avg.Contribution to Democrats who did not vote"];
-        legend_total = ["Total Contributions to Republicans", "Total Contributions to Democrats"];
 
         var legend = chart.append("g")
             .attr("font-family", "sans-serif")
@@ -241,6 +263,7 @@ d3.queue()
         });
 
         var keys_contri = ["contri_align_r", "contri_unalign_r", "contri_novote_r", "contri_novote_d", "contri_unalign_d", "contri_align_d"];
+        var legend_contri = ["Republicans who voted in favor of lobby", "Republicans who voted against lobby", "Lobbied Republicans who did not vote", "Lobbied Democrats who did not vote", "Democrats who voted against lobby", "Democrats who voted in favor of lobby"];
 
         x.domain(data.map(function (d) {
             return d.abv;
@@ -260,6 +283,10 @@ d3.queue()
             })
             .selectAll("rect")
             .data(function (d, i) {
+                // Add in a number that tells us which data series each column belongs to
+                d.forEach(function (e) {
+                    e["dataseries"] = i;
+                });
                 return d;
             })
             .enter().append("rect")
@@ -299,9 +326,23 @@ d3.queue()
                         }
                     });
 
+                storytip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                storytip.html(
+                        generateStory(d, legend_contri, 2)
+                    )
+                    .style("left", (xPosition + 40) + "px")
+                    .style("top", function () {
+                        return (yPosition + 540) + "px";
+                    });
+
             })
             .on("mouseout", function (d) {
                 tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+                storytip.transition()
                     .duration(500)
                     .style("opacity", 0);
             });
@@ -337,9 +378,7 @@ d3.queue()
             .attr("font-family", "sans-serif")
             .attr("font-size", 16)
             .attr("text-anchor", "middle")
-            .text("Contributions per Representitive ($)");
-
-        var legend_contri = ["Republicans who voted in favor of lobby", "Republicans who voted against lobby", "Lobbied Republicans who did not vote", "Lobbied Democrats who did not vote", "Democrats who voted against lobby", "Democrats who voted in favor of lobby"];
+            .text("Contributions per Representative ($)");
 
         var legend2 = chart2.append("g")
             .attr("font-family", "sans-serif")
@@ -405,7 +444,7 @@ function generateTooltipHtml(d, g) {
     if (g == 1) {
         body = "<div class=\"tip contributions\" style=\"margin-top:10px\">" +
             "<p><b  class=\"tip h2\">Contribution Distribution</b><br /> \
-                             Average contribution per representitive who voted in favor of lobby, against lobby or was lobbied but did not vote.</p>" +
+                             Average contribution per representative who voted in favor of lobby, against lobby or was lobbied but did not vote.</p>" +
             "<table class=\"tip table\">" +
             "<tr>" +
             "<th class=\"tip table\">Party</th>" +
@@ -432,7 +471,7 @@ function generateTooltipHtml(d, g) {
     } else if (g == 2) {
         body = "<div class=\"tip contributions\" style=\"margin-top:10px\">" +
             "<p><b  class=\"tip h2\">Vote Distribution by Lobbying</b><br /> \
-                             Count of representitives who voted in favor of lobby, against lobby, were not lobbied at all or were lobbied but did not vote.</p>" +
+                             Count of representatives who voted in favor of lobby, against lobby, were not lobbied at all or were lobbied but did not vote.</p>" +
             "<table class=\"tip table\">" +
             "<tr>" +
             "<th class=\"tip table\">Party</th>" +
@@ -482,4 +521,20 @@ function generateTooltipHtml(d, g) {
         "</div>";
 
     return header.concat(body.concat(trailer));
+}
+
+function generateStory(d, story, g) {
+
+    var header;
+    var trailer;
+
+    if (g == 1) {
+        header = "<b>" + (d[1] - d[0]);
+        trailer = " ".concat(story[d.dataseries]) + "</b>";
+    } else if (g == 2) {
+        header = "<b>" + d3.format("$,")(d[1] - d[0]);
+        trailer = " on average given to ".concat(story[d.dataseries]) + "</b>";
+    }
+
+    return header.concat(trailer);
 }
